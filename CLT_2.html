@@ -335,21 +335,21 @@ xbar_holder2 = numeric(simulations) # This will hold all the sample means for th
 <pre class="r"><code>par(mfrow = c(2,1))
 hist(xbar_holder1, col = &quot;blue&quot;, main = paste(&quot;Distribution of the sample mean: n = &quot;, n1), xlab = &quot;Dist 1 Sample Means&quot;, xlim = c(-4,4))
 hist(xbar_holder2, col = &quot;red&quot;, main = paste(&quot;Distribution of the sample mean: n = &quot;, n2), xlab = &quot;Dist 2 Sample Means&quot;, xlim = c(-4,4))</code></pre>
-<p><img src="CLT_2_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="CLT_2_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 </div>
 </div>
 <div id="summary-statistics" class="section level2">
 <h2>Summary Statistics</h2>
 <pre class="r"><code>summary(xbar_holder1) #5 number summary and the mean</code></pre>
-<pre><code>##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
-## -1.074141 -0.210532  0.002114  0.002049  0.218897  0.879507</code></pre>
+<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## -1.00244 -0.18891  0.02101  0.01694  0.22836  1.08926</code></pre>
 <pre class="r"><code>summary(xbar_holder2) #5 number summary and the mean</code></pre>
 <pre><code>##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
-## -0.380356 -0.063584  0.002338  0.004024  0.071771  0.419878</code></pre>
+## -0.291814 -0.071824 -0.003264 -0.002799  0.068400  0.333175</code></pre>
 <pre class="r"><code>sd(xbar_holder1) # standard deviation of dstribuion 1</code></pre>
-<pre><code>## [1] 0.3136877</code></pre>
+<pre><code>## [1] 0.3102602</code></pre>
 <pre class="r"><code>sd(xbar_holder2) #standard deviation of distribuion 2</code></pre>
-<pre><code>## [1] 0.1021949</code></pre>
+<pre><code>## [1] 0.1010771</code></pre>
 </div>
 </div>
 
