@@ -1,0 +1,1701 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Edward Roske" />
+
+<meta name="date" content="2019-12-29" />
+
+<title>Budweiser Analysis</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">About Me</a>
+</li>
+<li>
+  <a href="beer.html">Beer Study</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Budweiser Analysis</h1>
+<h4 class="author">Edward Roske</h4>
+<h4 class="date">12/29/2019</h4>
+
+</div>
+
+
+<div id="presentation-for-budweiser-leadership" class="section level1">
+<h1>Presentation for Budweiser leadership</h1>
+<ul>
+<li><strong>CEO:</strong> Carlos Brito</li>
+<li><strong>CFO:</strong> Felipe Dutra</li>
+</ul>
+</div>
+<div id="craft-beer-analysis" class="section level1">
+<h1>Craft Beer Analysis</h1>
+<div id="this-presentation-is-to-report-and-analyze-craft-beer-data-to-identify-potential-options-for-budweisers-strategic-direction." class="section level2">
+<h2>This presentation is to report and analyze craft beer data to identify potential options for Budweiser’s strategic direction.</h2>
+<hr />
+</div>
+<div id="begin-by-loading-the-data-and-preparing-it" class="section level2">
+<h2>Begin by loading the data and preparing it</h2>
+<pre class="r"><code># Unit 8: Beer Analysis for Budweiser
+
+# Read dataset
+# Some fields (State in Breweries) start with spaces, so remove them
+url &lt;- &quot;https://raw.githubusercontent.com/ERoske/MSDS-6306/master/&quot;
+beers &lt;- read.csv(paste0(url,&quot;Beers.csv&quot;), strip.white=TRUE, sep=&quot;,&quot;)
+breweries &lt;- read.csv(paste0(url,&quot;Breweries.csv&quot;), strip.white=TRUE, sep=&quot;,&quot;)
+beers$Ounces &lt;- as.factor(beers$Ounces)
+
+# Add variables
+# Ale, IPA, or neither
+beers$Ale &lt;- &quot;No&quot;
+beers$Ale[grep(&quot;Ale&quot;, beers$Style)] &lt;- &quot;Other&quot;
+beers$Ale[grep(&quot;IPA&quot;, beers$Style)] &lt;- &quot;IPA&quot;</code></pre>
+<hr />
+</div>
+<div id="question-3" class="section level2">
+<h2><strong>Question 3:</strong></h2>
+</div>
+<div id="address-the-missing-values-in-each-column." class="section level2">
+<h2>Address the missing values in each column.</h2>
+</div>
+<div id="missing-values-abv-ibu-style" class="section level2">
+<h2>Missing values: ABV, IBU, Style</h2>
+</div>
+<div id="should-we-leave-empty-or-fill-with-averages" class="section level2">
+<h2>Should we leave empty or fill with averages?</h2>
+<pre class="r"><code>sum(is.na(beers$ABV))</code></pre>
+<pre><code>## [1] 62</code></pre>
+<pre class="r"><code>sum(is.na(beers$IBU))</code></pre>
+<pre><code>## [1] 1005</code></pre>
+<pre class="r"><code>sum(beers$Style==&quot;&quot;)</code></pre>
+<pre><code>## [1] 5</code></pre>
+</div>
+<div id="answer-3" class="section level2">
+<h2><strong>Answer 3:</strong></h2>
+</div>
+<div id="for-now-we-will-replace-with-overall-medians-or-generic-other." class="section level2">
+<h2>For now, we will replace with overall medians (or generic “Other”).</h2>
+<pre class="r"><code>beers$ABV[is.na(beers$ABV)] &lt;- median(beers$ABV, na.rm=TRUE)
+beers$IBU[is.na(beers$IBU)] &lt;- median(beers$IBU, na.rm=TRUE)
+beers$Style[beers$Style==&quot;&quot;] &lt;- &quot;Other&quot;</code></pre>
+<hr />
+</div>
+<div id="question-1" class="section level2">
+<h2><strong>Question 1:</strong></h2>
+</div>
+<div id="how-many-breweries-are-present-in-each-state" class="section level2">
+<h2>How many breweries are present in each state?</h2>
+<pre class="r"><code>state_table &lt;- as.data.frame(table(breweries$State))
+state_summary &lt;- merge(statepop, state_table, by.x=&quot;abbr&quot;, by.y=&quot;Var1&quot;)
+state_summary$PerCapita &lt;- round(state_summary$pop_2015 / state_summary$Freq)</code></pre>
+</div>
+<div id="answer-1" class="section level2">
+<h2><strong>Answer 1:</strong></h2>
+</div>
+<div id="here-is-the-data-summarized-by-state-and-district-of-columbia" class="section level2">
+<h2>Here is the data summarized by State (and District of Columbia):</h2>
+<pre class="r"><code># Table: Brewery Count
+knitr::kable(state_table,
+    caption = &quot;Breweries present in each state&quot;)</code></pre>
+<table>
+<caption>Breweries present in each state</caption>
+<thead>
+<tr class="header">
+<th align="left">Var1</th>
+<th align="right">Freq</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AK</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">AL</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">AR</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">AZ</td>
+<td align="right">11</td>
+</tr>
+<tr class="odd">
+<td align="left">CA</td>
+<td align="right">39</td>
+</tr>
+<tr class="even">
+<td align="left">CO</td>
+<td align="right">47</td>
+</tr>
+<tr class="odd">
+<td align="left">CT</td>
+<td align="right">8</td>
+</tr>
+<tr class="even">
+<td align="left">DC</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">DE</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">FL</td>
+<td align="right">15</td>
+</tr>
+<tr class="odd">
+<td align="left">GA</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">HI</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">IA</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">ID</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="left">IL</td>
+<td align="right">18</td>
+</tr>
+<tr class="even">
+<td align="left">IN</td>
+<td align="right">22</td>
+</tr>
+<tr class="odd">
+<td align="left">KS</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">KY</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">LA</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">MA</td>
+<td align="right">23</td>
+</tr>
+<tr class="odd">
+<td align="left">MD</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="left">ME</td>
+<td align="right">9</td>
+</tr>
+<tr class="odd">
+<td align="left">MI</td>
+<td align="right">32</td>
+</tr>
+<tr class="even">
+<td align="left">MN</td>
+<td align="right">12</td>
+</tr>
+<tr class="odd">
+<td align="left">MO</td>
+<td align="right">9</td>
+</tr>
+<tr class="even">
+<td align="left">MS</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">MT</td>
+<td align="right">9</td>
+</tr>
+<tr class="even">
+<td align="left">NC</td>
+<td align="right">19</td>
+</tr>
+<tr class="odd">
+<td align="left">ND</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">NE</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="left">NH</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">NJ</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">NM</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">NV</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">NY</td>
+<td align="right">16</td>
+</tr>
+<tr class="even">
+<td align="left">OH</td>
+<td align="right">15</td>
+</tr>
+<tr class="odd">
+<td align="left">OK</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="left">OR</td>
+<td align="right">29</td>
+</tr>
+<tr class="odd">
+<td align="left">PA</td>
+<td align="right">25</td>
+</tr>
+<tr class="even">
+<td align="left">RI</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="left">SC</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">SD</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">TN</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">TX</td>
+<td align="right">28</td>
+</tr>
+<tr class="odd">
+<td align="left">UT</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">VA</td>
+<td align="right">16</td>
+</tr>
+<tr class="odd">
+<td align="left">VT</td>
+<td align="right">10</td>
+</tr>
+<tr class="even">
+<td align="left">WA</td>
+<td align="right">23</td>
+</tr>
+<tr class="odd">
+<td align="left">WI</td>
+<td align="right">20</td>
+</tr>
+<tr class="even">
+<td align="left">WV</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">WY</td>
+<td align="right">4</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Graph: Brewery Count
+plot_usmap(data=state_summary, values=&quot;Freq&quot;, color=&quot;black&quot;) +
+    scale_fill_continuous(
+        low=&quot;white&quot;, high=&quot;red&quot;, name=&quot;Breweries&quot;, label=scales::comma
+    ) +
+    theme(legend.position=&quot;right&quot;) +
+    labs(title=&quot;Brewery Analysis by State&quot;) +
+    theme(plot.title=element_text(size=18, hjust=0.5, face=&quot;bold&quot;))</code></pre>
+<p><img src="Beer_files/figure-html/A1-1.png" width="672" /></p>
+<hr />
+</div>
+<div id="question-2" class="section level2">
+<h2><strong>Question 2:</strong></h2>
+</div>
+<div id="merge-beer-data-with-the-breweries-data." class="section level2">
+<h2>Merge beer data with the breweries data.</h2>
+<pre class="r"><code>merged &lt;- merge(beers, breweries, by.x=&quot;Brewery_id&quot;, by.y=&quot;Brew_ID&quot;)
+names(merged)[1] &lt;- &#39;Brewery_ID&#39;
+names(merged)[2] &lt;- &#39;Beer_Name&#39;
+names(merged)[9] &lt;- &#39;Brewery_Name&#39;
+
+# Print first 6 and last 6 rows of the merged file
+#head(merged, n=6)
+#tail(merged, n=6)
+
+data &lt;- rbind(head(merged, n=6),
+          tail(merged, n=6))</code></pre>
+</div>
+<div id="answer-2" class="section level2">
+<h2><strong>Answer 2:</strong></h2>
+</div>
+<div id="here-are-the-first-6-and-last-6-rows-of-the-merged-file." class="section level2">
+<h2>Here are the first 6 and last 6 rows of the merged file.</h2>
+<pre class="r"><code>knitr::kable(data,
+    caption = &quot;Merged Beer/Brewery Data&quot;)</code></pre>
+<table>
+<caption>Merged Beer/Brewery Data</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Brewery_ID</th>
+<th align="left">Beer_Name</th>
+<th align="right">Beer_ID</th>
+<th align="right">ABV</th>
+<th align="right">IBU</th>
+<th align="left">Style</th>
+<th align="left">Ounces</th>
+<th align="left">Ale</th>
+<th align="left">Brewery_Name</th>
+<th align="left">City</th>
+<th align="left">State</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td align="right">1</td>
+<td align="left">Get Together</td>
+<td align="right">2692</td>
+<td align="right">0.045</td>
+<td align="right">50</td>
+<td align="left">American IPA</td>
+<td align="left">16</td>
+<td align="left">IPA</td>
+<td align="left">NorthGate Brewing</td>
+<td align="left">Minneapolis</td>
+<td align="left">MN</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td align="right">1</td>
+<td align="left">Maggie’s Leap</td>
+<td align="right">2691</td>
+<td align="right">0.049</td>
+<td align="right">26</td>
+<td align="left">Milk / Sweet Stout</td>
+<td align="left">16</td>
+<td align="left">No</td>
+<td align="left">NorthGate Brewing</td>
+<td align="left">Minneapolis</td>
+<td align="left">MN</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td align="right">1</td>
+<td align="left">Wall’s End</td>
+<td align="right">2690</td>
+<td align="right">0.048</td>
+<td align="right">19</td>
+<td align="left">English Brown Ale</td>
+<td align="left">16</td>
+<td align="left">Other</td>
+<td align="left">NorthGate Brewing</td>
+<td align="left">Minneapolis</td>
+<td align="left">MN</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td align="right">1</td>
+<td align="left">Pumpion</td>
+<td align="right">2689</td>
+<td align="right">0.060</td>
+<td align="right">38</td>
+<td align="left">Pumpkin Ale</td>
+<td align="left">16</td>
+<td align="left">Other</td>
+<td align="left">NorthGate Brewing</td>
+<td align="left">Minneapolis</td>
+<td align="left">MN</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td align="right">1</td>
+<td align="left">Stronghold</td>
+<td align="right">2688</td>
+<td align="right">0.060</td>
+<td align="right">25</td>
+<td align="left">American Porter</td>
+<td align="left">16</td>
+<td align="left">No</td>
+<td align="left">NorthGate Brewing</td>
+<td align="left">Minneapolis</td>
+<td align="left">MN</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td align="right">1</td>
+<td align="left">Parapet ESB</td>
+<td align="right">2687</td>
+<td align="right">0.056</td>
+<td align="right">47</td>
+<td align="left">Extra Special / Strong Bitter (ESB)</td>
+<td align="left">16</td>
+<td align="left">No</td>
+<td align="left">NorthGate Brewing</td>
+<td align="left">Minneapolis</td>
+<td align="left">MN</td>
+</tr>
+<tr class="odd">
+<td>2405</td>
+<td align="right">556</td>
+<td align="left">Pilsner Ukiah</td>
+<td align="right">98</td>
+<td align="right">0.055</td>
+<td align="right">35</td>
+<td align="left">German Pilsener</td>
+<td align="left">12</td>
+<td align="left">No</td>
+<td align="left">Ukiah Brewing Company</td>
+<td align="left">Ukiah</td>
+<td align="left">CA</td>
+</tr>
+<tr class="even">
+<td>2406</td>
+<td align="right">557</td>
+<td align="left">Heinnieweisse Weissebier</td>
+<td align="right">52</td>
+<td align="right">0.049</td>
+<td align="right">35</td>
+<td align="left">Hefeweizen</td>
+<td align="left">12</td>
+<td align="left">No</td>
+<td align="left">Butternuts Beer and Ale</td>
+<td align="left">Garrattsville</td>
+<td align="left">NY</td>
+</tr>
+<tr class="odd">
+<td>2407</td>
+<td align="right">557</td>
+<td align="left">Snapperhead IPA</td>
+<td align="right">51</td>
+<td align="right">0.068</td>
+<td align="right">35</td>
+<td align="left">American IPA</td>
+<td align="left">12</td>
+<td align="left">IPA</td>
+<td align="left">Butternuts Beer and Ale</td>
+<td align="left">Garrattsville</td>
+<td align="left">NY</td>
+</tr>
+<tr class="even">
+<td>2408</td>
+<td align="right">557</td>
+<td align="left">Moo Thunder Stout</td>
+<td align="right">50</td>
+<td align="right">0.049</td>
+<td align="right">35</td>
+<td align="left">Milk / Sweet Stout</td>
+<td align="left">12</td>
+<td align="left">No</td>
+<td align="left">Butternuts Beer and Ale</td>
+<td align="left">Garrattsville</td>
+<td align="left">NY</td>
+</tr>
+<tr class="odd">
+<td>2409</td>
+<td align="right">557</td>
+<td align="left">Porkslap Pale Ale</td>
+<td align="right">49</td>
+<td align="right">0.043</td>
+<td align="right">35</td>
+<td align="left">American Pale Ale (APA)</td>
+<td align="left">12</td>
+<td align="left">Other</td>
+<td align="left">Butternuts Beer and Ale</td>
+<td align="left">Garrattsville</td>
+<td align="left">NY</td>
+</tr>
+<tr class="even">
+<td>2410</td>
+<td align="right">558</td>
+<td align="left">Urban Wilderness Pale Ale</td>
+<td align="right">30</td>
+<td align="right">0.049</td>
+<td align="right">35</td>
+<td align="left">English Pale Ale</td>
+<td align="left">12</td>
+<td align="left">Other</td>
+<td align="left">Sleeping Lady Brewing Company</td>
+<td align="left">Anchorage</td>
+<td align="left">AK</td>
+</tr>
+</tbody>
+</table>
+<hr />
+</div>
+<div id="question-4" class="section level2">
+<h2><strong>Question 4:</strong></h2>
+</div>
+<div id="compute-the-median-alcohol-content-and-ibu-for-each-state." class="section level2">
+<h2>Compute the median alcohol content and IBU for each state.</h2>
+</div>
+<div id="print-and-graph-the-abv-and-ibu-for-each-state." class="section level2">
+<h2>Print and graph the ABV and IBU for each state.</h2>
+<pre class="r"><code>state_medians &lt;-
+    merged %&gt;%
+    group_by(State) %&gt;%
+    dplyr::summarise(IBU = median(IBU),
+                     ABV = median(ABV))
+state_summary &lt;- merge(state_summary, state_medians, by.x=&quot;abbr&quot;, by.y=&quot;State&quot;)
+
+## Print a table with ABV and then IBU for each state.
+knitr::kable(state_summary,
+    caption = &quot;Median Alcohol Content and IBU for each state&quot;)</code></pre>
+<table>
+<caption>Median Alcohol Content and IBU for each state</caption>
+<thead>
+<tr class="header">
+<th align="left">abbr</th>
+<th align="left">fips</th>
+<th align="left">full</th>
+<th align="right">pop_2015</th>
+<th align="right">Freq</th>
+<th align="right">PerCapita</th>
+<th align="right">IBU</th>
+<th align="right">ABV</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">AK</td>
+<td align="left">02</td>
+<td align="left">Alaska</td>
+<td align="right">738432</td>
+<td align="right">7</td>
+<td align="right">105490</td>
+<td align="right">35.0</td>
+<td align="right">0.0560</td>
+</tr>
+<tr class="even">
+<td align="left">AL</td>
+<td align="left">01</td>
+<td align="left">Alabama</td>
+<td align="right">4858979</td>
+<td align="right">3</td>
+<td align="right">1619660</td>
+<td align="right">39.5</td>
+<td align="right">0.0600</td>
+</tr>
+<tr class="odd">
+<td align="left">AR</td>
+<td align="left">05</td>
+<td align="left">Arkansas</td>
+<td align="right">2978204</td>
+<td align="right">2</td>
+<td align="right">1489102</td>
+<td align="right">35.0</td>
+<td align="right">0.0520</td>
+</tr>
+<tr class="even">
+<td align="left">AZ</td>
+<td align="left">04</td>
+<td align="left">Arizona</td>
+<td align="right">6828065</td>
+<td align="right">11</td>
+<td align="right">620733</td>
+<td align="right">35.0</td>
+<td align="right">0.0560</td>
+</tr>
+<tr class="odd">
+<td align="left">CA</td>
+<td align="left">06</td>
+<td align="left">California</td>
+<td align="right">39144818</td>
+<td align="right">39</td>
+<td align="right">1003713</td>
+<td align="right">35.0</td>
+<td align="right">0.0580</td>
+</tr>
+<tr class="even">
+<td align="left">CO</td>
+<td align="left">08</td>
+<td align="left">Colorado</td>
+<td align="right">5456574</td>
+<td align="right">47</td>
+<td align="right">116097</td>
+<td align="right">35.0</td>
+<td align="right">0.0590</td>
+</tr>
+<tr class="odd">
+<td align="left">CT</td>
+<td align="left">09</td>
+<td align="left">Connecticut</td>
+<td align="right">3590886</td>
+<td align="right">8</td>
+<td align="right">448861</td>
+<td align="right">35.0</td>
+<td align="right">0.0600</td>
+</tr>
+<tr class="even">
+<td align="left">DC</td>
+<td align="left">11</td>
+<td align="left">District of Columbia</td>
+<td align="right">672228</td>
+<td align="right">1</td>
+<td align="right">672228</td>
+<td align="right">35.0</td>
+<td align="right">0.0625</td>
+</tr>
+<tr class="odd">
+<td align="left">DE</td>
+<td align="left">10</td>
+<td align="left">Delaware</td>
+<td align="right">945934</td>
+<td align="right">2</td>
+<td align="right">472967</td>
+<td align="right">43.5</td>
+<td align="right">0.0555</td>
+</tr>
+<tr class="even">
+<td align="left">FL</td>
+<td align="left">12</td>
+<td align="left">Florida</td>
+<td align="right">20271272</td>
+<td align="right">15</td>
+<td align="right">1351418</td>
+<td align="right">35.0</td>
+<td align="right">0.0560</td>
+</tr>
+<tr class="odd">
+<td align="left">GA</td>
+<td align="left">13</td>
+<td align="left">Georgia</td>
+<td align="right">10214860</td>
+<td align="right">7</td>
+<td align="right">1459266</td>
+<td align="right">35.0</td>
+<td align="right">0.0550</td>
+</tr>
+<tr class="even">
+<td align="left">HI</td>
+<td align="left">15</td>
+<td align="left">Hawaii</td>
+<td align="right">1431603</td>
+<td align="right">4</td>
+<td align="right">357901</td>
+<td align="right">35.0</td>
+<td align="right">0.0540</td>
+</tr>
+<tr class="odd">
+<td align="left">IA</td>
+<td align="left">19</td>
+<td align="left">Iowa</td>
+<td align="right">3123899</td>
+<td align="right">5</td>
+<td align="right">624780</td>
+<td align="right">29.5</td>
+<td align="right">0.0555</td>
+</tr>
+<tr class="even">
+<td align="left">ID</td>
+<td align="left">16</td>
+<td align="left">Idaho</td>
+<td align="right">1654930</td>
+<td align="right">5</td>
+<td align="right">330986</td>
+<td align="right">35.0</td>
+<td align="right">0.0565</td>
+</tr>
+<tr class="odd">
+<td align="left">IL</td>
+<td align="left">17</td>
+<td align="left">Illinois</td>
+<td align="right">12859995</td>
+<td align="right">18</td>
+<td align="right">714444</td>
+<td align="right">35.0</td>
+<td align="right">0.0580</td>
+</tr>
+<tr class="even">
+<td align="left">IN</td>
+<td align="left">18</td>
+<td align="left">Indiana</td>
+<td align="right">6619680</td>
+<td align="right">22</td>
+<td align="right">300895</td>
+<td align="right">35.0</td>
+<td align="right">0.0580</td>
+</tr>
+<tr class="odd">
+<td align="left">KS</td>
+<td align="left">20</td>
+<td align="left">Kansas</td>
+<td align="right">2911641</td>
+<td align="right">3</td>
+<td align="right">970547</td>
+<td align="right">22.0</td>
+<td align="right">0.0500</td>
+</tr>
+<tr class="even">
+<td align="left">KY</td>
+<td align="left">21</td>
+<td align="left">Kentucky</td>
+<td align="right">4425092</td>
+<td align="right">4</td>
+<td align="right">1106273</td>
+<td align="right">35.0</td>
+<td align="right">0.0600</td>
+</tr>
+<tr class="odd">
+<td align="left">LA</td>
+<td align="left">22</td>
+<td align="left">Louisiana</td>
+<td align="right">4670724</td>
+<td align="right">5</td>
+<td align="right">934145</td>
+<td align="right">35.0</td>
+<td align="right">0.0520</td>
+</tr>
+<tr class="even">
+<td align="left">MA</td>
+<td align="left">25</td>
+<td align="left">Massachusetts</td>
+<td align="right">6794422</td>
+<td align="right">23</td>
+<td align="right">295410</td>
+<td align="right">35.0</td>
+<td align="right">0.0540</td>
+</tr>
+<tr class="odd">
+<td align="left">MD</td>
+<td align="left">24</td>
+<td align="left">Maryland</td>
+<td align="right">6006401</td>
+<td align="right">7</td>
+<td align="right">858057</td>
+<td align="right">35.0</td>
+<td align="right">0.0580</td>
+</tr>
+<tr class="even">
+<td align="left">ME</td>
+<td align="left">23</td>
+<td align="left">Maine</td>
+<td align="right">1329328</td>
+<td align="right">9</td>
+<td align="right">147703</td>
+<td align="right">35.0</td>
+<td align="right">0.0510</td>
+</tr>
+<tr class="odd">
+<td align="left">MI</td>
+<td align="left">26</td>
+<td align="left">Michigan</td>
+<td align="right">9922576</td>
+<td align="right">32</td>
+<td align="right">310080</td>
+<td align="right">35.0</td>
+<td align="right">0.0600</td>
+</tr>
+<tr class="even">
+<td align="left">MN</td>
+<td align="left">27</td>
+<td align="left">Minnesota</td>
+<td align="right">5489594</td>
+<td align="right">12</td>
+<td align="right">457466</td>
+<td align="right">38.0</td>
+<td align="right">0.0560</td>
+</tr>
+<tr class="odd">
+<td align="left">MO</td>
+<td align="left">29</td>
+<td align="left">Missouri</td>
+<td align="right">6083672</td>
+<td align="right">9</td>
+<td align="right">675964</td>
+<td align="right">32.5</td>
+<td align="right">0.0550</td>
+</tr>
+<tr class="even">
+<td align="left">MS</td>
+<td align="left">28</td>
+<td align="left">Mississippi</td>
+<td align="right">2992333</td>
+<td align="right">2</td>
+<td align="right">1496166</td>
+<td align="right">45.0</td>
+<td align="right">0.0580</td>
+</tr>
+<tr class="odd">
+<td align="left">MT</td>
+<td align="left">30</td>
+<td align="left">Montana</td>
+<td align="right">1032949</td>
+<td align="right">9</td>
+<td align="right">114772</td>
+<td align="right">35.0</td>
+<td align="right">0.0550</td>
+</tr>
+<tr class="even">
+<td align="left">NC</td>
+<td align="left">37</td>
+<td align="left">North Carolina</td>
+<td align="right">10042802</td>
+<td align="right">19</td>
+<td align="right">528569</td>
+<td align="right">35.0</td>
+<td align="right">0.0570</td>
+</tr>
+<tr class="odd">
+<td align="left">ND</td>
+<td align="left">38</td>
+<td align="left">North Dakota</td>
+<td align="right">756927</td>
+<td align="right">1</td>
+<td align="right">756927</td>
+<td align="right">32.0</td>
+<td align="right">0.0500</td>
+</tr>
+<tr class="even">
+<td align="left">NE</td>
+<td align="left">31</td>
+<td align="left">Nebraska</td>
+<td align="right">1896190</td>
+<td align="right">5</td>
+<td align="right">379238</td>
+<td align="right">35.0</td>
+<td align="right">0.0560</td>
+</tr>
+<tr class="odd">
+<td align="left">NH</td>
+<td align="left">33</td>
+<td align="left">New Hampshire</td>
+<td align="right">1330608</td>
+<td align="right">3</td>
+<td align="right">443536</td>
+<td align="right">35.0</td>
+<td align="right">0.0550</td>
+</tr>
+<tr class="even">
+<td align="left">NJ</td>
+<td align="left">34</td>
+<td align="left">New Jersey</td>
+<td align="right">8958013</td>
+<td align="right">3</td>
+<td align="right">2986004</td>
+<td align="right">34.5</td>
+<td align="right">0.0460</td>
+</tr>
+<tr class="odd">
+<td align="left">NM</td>
+<td align="left">35</td>
+<td align="left">New Mexico</td>
+<td align="right">2085109</td>
+<td align="right">4</td>
+<td align="right">521277</td>
+<td align="right">35.0</td>
+<td align="right">0.0610</td>
+</tr>
+<tr class="even">
+<td align="left">NV</td>
+<td align="left">32</td>
+<td align="left">Nevada</td>
+<td align="right">2890845</td>
+<td align="right">2</td>
+<td align="right">1445422</td>
+<td align="right">35.0</td>
+<td align="right">0.0580</td>
+</tr>
+<tr class="odd">
+<td align="left">NY</td>
+<td align="left">36</td>
+<td align="left">New York</td>
+<td align="right">19795791</td>
+<td align="right">16</td>
+<td align="right">1237237</td>
+<td align="right">35.0</td>
+<td align="right">0.0550</td>
+</tr>
+<tr class="even">
+<td align="left">OH</td>
+<td align="left">39</td>
+<td align="left">Ohio</td>
+<td align="right">11613423</td>
+<td align="right">15</td>
+<td align="right">774228</td>
+<td align="right">35.0</td>
+<td align="right">0.0580</td>
+</tr>
+<tr class="odd">
+<td align="left">OK</td>
+<td align="left">40</td>
+<td align="left">Oklahoma</td>
+<td align="right">3911338</td>
+<td align="right">6</td>
+<td align="right">651890</td>
+<td align="right">35.0</td>
+<td align="right">0.0600</td>
+</tr>
+<tr class="even">
+<td align="left">OR</td>
+<td align="left">41</td>
+<td align="left">Oregon</td>
+<td align="right">4028977</td>
+<td align="right">29</td>
+<td align="right">138930</td>
+<td align="right">35.0</td>
+<td align="right">0.0560</td>
+</tr>
+<tr class="odd">
+<td align="left">PA</td>
+<td align="left">42</td>
+<td align="left">Pennsylvania</td>
+<td align="right">12802503</td>
+<td align="right">25</td>
+<td align="right">512100</td>
+<td align="right">35.0</td>
+<td align="right">0.0560</td>
+</tr>
+<tr class="even">
+<td align="left">RI</td>
+<td align="left">44</td>
+<td align="left">Rhode Island</td>
+<td align="right">1056298</td>
+<td align="right">5</td>
+<td align="right">211260</td>
+<td align="right">32.0</td>
+<td align="right">0.0550</td>
+</tr>
+<tr class="odd">
+<td align="left">SC</td>
+<td align="left">45</td>
+<td align="left">South Carolina</td>
+<td align="right">4896146</td>
+<td align="right">4</td>
+<td align="right">1224036</td>
+<td align="right">35.0</td>
+<td align="right">0.0550</td>
+</tr>
+<tr class="even">
+<td align="left">SD</td>
+<td align="left">46</td>
+<td align="left">South Dakota</td>
+<td align="right">858469</td>
+<td align="right">1</td>
+<td align="right">858469</td>
+<td align="right">35.0</td>
+<td align="right">0.0600</td>
+</tr>
+<tr class="odd">
+<td align="left">TN</td>
+<td align="left">47</td>
+<td align="left">Tennessee</td>
+<td align="right">6600299</td>
+<td align="right">3</td>
+<td align="right">2200100</td>
+<td align="right">36.0</td>
+<td align="right">0.0570</td>
+</tr>
+<tr class="even">
+<td align="left">TX</td>
+<td align="left">48</td>
+<td align="left">Texas</td>
+<td align="right">27469114</td>
+<td align="right">28</td>
+<td align="right">981040</td>
+<td align="right">35.0</td>
+<td align="right">0.0560</td>
+</tr>
+<tr class="odd">
+<td align="left">UT</td>
+<td align="left">49</td>
+<td align="left">Utah</td>
+<td align="right">2995919</td>
+<td align="right">4</td>
+<td align="right">748980</td>
+<td align="right">35.0</td>
+<td align="right">0.0400</td>
+</tr>
+<tr class="even">
+<td align="left">VA</td>
+<td align="left">51</td>
+<td align="left">Virginia</td>
+<td align="right">8382993</td>
+<td align="right">16</td>
+<td align="right">523937</td>
+<td align="right">37.5</td>
+<td align="right">0.0565</td>
+</tr>
+<tr class="odd">
+<td align="left">VT</td>
+<td align="left">50</td>
+<td align="left">Vermont</td>
+<td align="right">626042</td>
+<td align="right">10</td>
+<td align="right">62604</td>
+<td align="right">35.0</td>
+<td align="right">0.0550</td>
+</tr>
+<tr class="even">
+<td align="left">WA</td>
+<td align="left">53</td>
+<td align="left">Washington</td>
+<td align="right">7170351</td>
+<td align="right">23</td>
+<td align="right">311754</td>
+<td align="right">35.0</td>
+<td align="right">0.0555</td>
+</tr>
+<tr class="odd">
+<td align="left">WI</td>
+<td align="left">55</td>
+<td align="left">Wisconsin</td>
+<td align="right">5771337</td>
+<td align="right">20</td>
+<td align="right">288567</td>
+<td align="right">35.0</td>
+<td align="right">0.0520</td>
+</tr>
+<tr class="even">
+<td align="left">WV</td>
+<td align="left">54</td>
+<td align="left">West Virginia</td>
+<td align="right">1844128</td>
+<td align="right">1</td>
+<td align="right">1844128</td>
+<td align="right">57.5</td>
+<td align="right">0.0620</td>
+</tr>
+<tr class="odd">
+<td align="left">WY</td>
+<td align="left">56</td>
+<td align="left">Wyoming</td>
+<td align="right">586107</td>
+<td align="right">4</td>
+<td align="right">146527</td>
+<td align="right">32.0</td>
+<td align="right">0.0500</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Graph IBUs and ABVs
+# IBU
+ggplot(state_summary,
+       aes(x=abbr,
+           y=IBU,
+           fill=IBU)) +
+    geom_bar(stat=&quot;identity&quot;) +
+    scale_fill_gradient(low=&quot;blue&quot;, high=&quot;red&quot;) +
+    labs(x=&quot;States&quot;,
+         y=&quot;IBU&quot;,
+         title=&quot;IBU Analysis by State&quot;) +
+    theme_economist_white() +
+    theme(legend.position=&quot;none&quot;,
+          plot.title=element_text(size=18, hjust=0.5, face=&quot;bold&quot;),
+          axis.title.x=element_text(size=12, face=&quot;bold&quot;),
+          axis.title.y=element_text(size=12, face=&quot;bold&quot;),
+          axis.text.x=element_text(size=10),
+          axis.text.y=element_text(size=6),
+    ) +
+    coord_flip()</code></pre>
+<p><img src="Beer_files/figure-html/Q4-1.png" width="672" /></p>
+<pre class="r"><code># ABV
+ggplot(state_summary,
+       aes(x=abbr,
+           y=ABV,
+           fill=ABV)) +
+    geom_bar(stat=&quot;identity&quot;) +
+    scale_fill_gradient(low=&quot;blue&quot;, high=&quot;red&quot;) +
+    labs(x=&quot;States&quot;,
+         y=&quot;IBU&quot;,
+         title=&quot;ABV Analysis by State&quot;) +
+    theme_economist_white() +
+    theme(legend.position=&quot;none&quot;,
+          plot.title=element_text(size=18, hjust=0.5, face=&quot;bold&quot;),
+          axis.title.x=element_text(size=12, face=&quot;bold&quot;),
+          axis.title.y=element_text(size=12, face=&quot;bold&quot;),
+          axis.text.x=element_text(size=10),
+          axis.text.y=element_text(size=6),
+    ) +
+    coord_flip()</code></pre>
+<p><img src="Beer_files/figure-html/Q4-2.png" width="672" /></p>
+</div>
+<div id="answer-4" class="section level2">
+<h2><strong>Answer 4:</strong></h2>
+</div>
+<div id="for-ibu-the-highest-states-are-west-virginia-mississippi-delaware-and-alabama." class="section level2">
+<h2>For IBU, the highest states are West Virginia, Mississippi, Delaware, and Alabama.</h2>
+</div>
+<div id="for-abv-there-is-much-more-variance-but-the-highest-states-are-district-of-columbia-west-virginia-alabama-and-kentucky." class="section level2">
+<h2>For ABV, there is much more variance, but the highest states are District of Columbia, West Virginia, Alabama, and Kentucky.</h2>
+</div>
+<div id="in-general-the-southern-states-tend-to-have-higher-bitterness-and-alcohol-content." class="section level2">
+<h2>In general, the Southern states tend to have higher bitterness and alcohol content.</h2>
+<hr />
+</div>
+<div id="question-5" class="section level2">
+<h2><strong>Question 5:</strong></h2>
+</div>
+<div id="which-state-has-the-maximum-alcoholic-abv-beer" class="section level2">
+<h2>Which state has the maximum alcoholic (ABV) beer?</h2>
+</div>
+<div id="which-state-has-the-most-bitter-ibu-beer" class="section level2">
+<h2>Which state has the most bitter (IBU) beer?</h2>
+<pre class="r"><code>paste(&quot;Top ABV State:&quot;,
+    state_summary[order(-state_summary$ABV),&quot;abbr&quot;][1])</code></pre>
+<pre><code>## [1] &quot;Top ABV State: DC&quot;</code></pre>
+<pre class="r"><code>paste(&quot;Top IBU State:&quot;,
+      state_summary[order(-state_summary$IBU),&quot;abbr&quot;][1])</code></pre>
+<pre><code>## [1] &quot;Top IBU State: WV&quot;</code></pre>
+</div>
+<div id="answer-5" class="section level2">
+<h2><strong>Answer 5:</strong></h2>
+</div>
+<div id="assuming-they-want-maximum-medians-from-question-4-and-not-a-single-beer-outlier" class="section level2">
+<h2>Assuming they want maximum medians from Question 4 and not a single beer outlier,</h2>
+<ul>
+<li>The top ABV state is DC.</li>
+<li>The top IBU state is WV.</li>
+</ul>
+<hr />
+</div>
+<div id="question-6" class="section level2">
+<h2><strong>Question 6:</strong></h2>
+</div>
+<div id="comment-on-the-summary-statistics-and-distribution-of-the-abv-variable." class="section level2">
+<h2>Comment on the summary statistics and distribution of the ABV variable.</h2>
+<pre class="r"><code>summary(merged$ABV)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+## 0.00100 0.05000 0.05600 0.05968 0.06700 0.12800</code></pre>
+<pre class="r"><code>sd(merged$ABV)</code></pre>
+<pre><code>## [1] 0.01337969</code></pre>
+<pre class="r"><code>ggplot(merged,
+       aes(x=Ounces,
+           y=ABV,
+           fill=Ounces)) +
+    geom_boxplot() +
+    labs(x=&quot;Ounces&quot;,
+         y=&quot;ABV&quot;,
+         title=&quot;ABV Analysis by Ounces&quot;) +
+    scale_y_continuous(name=&quot;ABV&quot;, breaks=seq(0.0,0.15,by=.01)) +
+    theme_economist_white() +
+    theme(legend.position=&quot;none&quot;,
+          plot.title=element_text(size=18, hjust=0.5, face=&quot;bold&quot;),
+          axis.title.x=element_text(size=12, face=&quot;bold&quot;),
+          axis.title.y=element_text(size=12, face=&quot;bold&quot;),
+          axis.text.x=element_text(size=10),
+          axis.text.y=element_text(size=10),
+    )</code></pre>
+<p><img src="Beer_files/figure-html/Q6-1.png" width="672" /></p>
+</div>
+<div id="answer-6" class="section level2">
+<h2><strong>Answer 6:</strong></h2>
+</div>
+<div id="the-median-abv-is-5.60.-the-mean-is-5.97-implying-a-right-skewed-distribution." class="section level2">
+<h2>The median ABV is 5.60%. The mean is 5.97% implying a right-skewed distribution.</h2>
+</div>
+<div id="the-interquartile-range-is-fairly-tight-ranging-from-5.0-6.7." class="section level2">
+<h2>The interquartile range is fairly tight ranging from 5.0%-6.7%.</h2>
+</div>
+<div id="ounce-beers-tend-to-have-the-lowest-average-abv." class="section level2">
+<h2>12-Ounce beers tend to have the lowest average ABV.</h2>
+</div>
+<div id="ounce-beers-tend-to-have-the-highest-average-abv." class="section level2">
+<h2>19.2-Ounce beers tend to have the highest average ABV.</h2>
+<hr />
+</div>
+<div id="question-7" class="section level2">
+<h2><strong>Question 7:</strong></h2>
+</div>
+<div id="is-there-an-apparent-relationship-between-the-bitterness-of-the-beer-and-its-alcoholic-content" class="section level2">
+<h2>Is there an apparent relationship between the bitterness of the beer and its alcoholic content?</h2>
+</div>
+<div id="draw-a-scatter-plot." class="section level2">
+<h2>Draw a scatter plot.</h2>
+</div>
+<div id="make-your-best-judgment-of-a-relationship-and-explain-your-answer." class="section level2">
+<h2>Make your best judgment of a relationship and EXPLAIN your answer.</h2>
+<pre class="r"><code># All Styles
+MergedClean &lt;- merged %&gt;%
+    filter(!ABV==median(beers$ABV, na.rm=TRUE) &amp;
+           !IBU==median(beers$IBU, na.rm=TRUE))
+ggplot(MergedClean, aes(x=IBU, y=ABV, color=Ale)) +
+    scale_x_continuous(name=&quot;IBU&quot;, breaks=seq(0,140,by=10), limits=c(0, 140)) +
+    scale_y_continuous(name=&quot;ABV&quot;, breaks=seq(0,0.13,by=.01), limits=c(0, 0.13)) +
+    ggtitle(&quot;ABV vs IBU Analysis&quot;) +
+    geom_point(position=&quot;jitter&quot;) +
+    geom_smooth(color=&quot;red&quot;, size=2, se=FALSE, method=&quot;lm&quot;) +
+    #scale_y_continuous(name=&quot;ABV&quot;, breaks=seq(0.0,0.15,by=.01)) +
+    theme_economist_white() +
+    theme(plot.title=element_text(size=18, hjust=0.5, face=&quot;bold&quot;),
+          axis.title.x=element_text(size=12, face=&quot;bold&quot;),
+          axis.title.y=element_text(size=12, face=&quot;bold&quot;),
+          axis.text.x=element_text(size=10),
+          axis.text.y=element_text(size=10),
+    )</code></pre>
+<p><img src="Beer_files/figure-html/Q7-1.png" width="672" /></p>
+<pre class="r"><code># Ale comparisons
+Ales &lt;- MergedClean %&gt;% filter(!Ale==&quot;No&quot;)
+ggplot(data=Ales, aes(x=IBU, y=ABV, color=Ale)) +
+    scale_x_continuous(name=&quot;IBU&quot;, breaks=seq(0,140,by=10), limits=c(0, 140)) +
+    scale_y_continuous(name=&quot;ABV&quot;, breaks=seq(0,0.13,by=.01), limits=c(0, 0.13)) +
+    ggtitle(&quot;ABV vs IBU Analysis&quot;) +
+    geom_point(position=&quot;jitter&quot;) +
+    geom_smooth(size=2, se=FALSE, method=&quot;lm&quot;) +
+    #scale_y_continuous(name=&quot;ABV&quot;, breaks=seq(0.0,0.15,by=.01)) +
+    theme_economist_white() +
+    theme(plot.title=element_text(size=18, hjust=0.5, face=&quot;bold&quot;),
+          axis.title.x=element_text(size=12, face=&quot;bold&quot;),
+          axis.title.y=element_text(size=12, face=&quot;bold&quot;),
+          axis.text.x=element_text(size=10),
+          axis.text.y=element_text(size=10),
+    )</code></pre>
+<p><img src="Beer_files/figure-html/Q7-2.png" width="672" /></p>
+</div>
+<div id="answer-7" class="section level2">
+<h2><strong>Answer 7:</strong></h2>
+</div>
+<div id="there-is-a-direct-relationship-positive-correlation-according-to-the-graph-of-ibu-and-abv." class="section level2">
+<h2>There is a direct relationship (positive correlation according to the graph) of IBU and ABV.</h2>
+</div>
+<div id="in-general-the-higher-the-ibu-bitterness-units-the-higher-the-abv." class="section level2">
+<h2>In general, the higher the IBU (Bitterness Units), the higher the ABV.</h2>
+</div>
+<div id="for-ipas-it-is-even-more-impactful-that-as-ibus-increase-abv-increases-even-more." class="section level2">
+<h2>For IPAs, it is even more impactful that as IBUs increase, ABV increases even more.</h2>
+<hr />
+</div>
+<div id="question-8" class="section level2">
+<h2><strong>Question 8:</strong></h2>
+</div>
+<div id="investigate-the-difference-with-respect-to-ibu-and-abv-between-ales-ipa-and-others" class="section level2">
+<h2>Investigate the difference with respect to IBU and ABV between Ales (IPA and Others)</h2>
+</div>
+<div id="use-knn-classification-to-investigate-this-relationship." class="section level2">
+<h2>use KNN classification to investigate this relationship.</h2>
+<pre class="r"><code># kNN Classification
+knnClassifications &lt;-
+    knn.cv(Ales[,4:5],
+           Ales$Ale,
+           k=round(sqrt(nrow(Ales))))
+(knnCM &lt;- confusionMatrix(table(knnClassifications, Ales$Ale)))</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##                   
+## knnClassifications IPA Other
+##              IPA   288    65
+##              Other  96   425
+##                                          
+##                Accuracy : 0.8158         
+##                  95% CI : (0.7885, 0.841)
+##     No Information Rate : 0.5606         
+##     P-Value [Acc &gt; NIR] : &lt; 2e-16        
+##                                          
+##                   Kappa : 0.6228         
+##                                          
+##  Mcnemar&#39;s Test P-Value : 0.01806        
+##                                          
+##             Sensitivity : 0.7500         
+##             Specificity : 0.8673         
+##          Pos Pred Value : 0.8159         
+##          Neg Pred Value : 0.8157         
+##              Prevalence : 0.4394         
+##          Detection Rate : 0.3295         
+##    Detection Prevalence : 0.4039         
+##       Balanced Accuracy : 0.8087         
+##                                          
+##        &#39;Positive&#39; Class : IPA            
+## </code></pre>
+</div>
+<div id="answer-8" class="section level2">
+<h2><strong>Answer 8:</strong></h2>
+</div>
+<div id="based-on-k-nn-analysis-we-can-predict-with-greater-than-81-accuracy" class="section level2">
+<h2>Based on K-NN Analysis, we can predict with greater than 81% Accuracy</h2>
+</div>
+<div id="if-something-is-an-ipa-or-another-ale-based-on-ibu-abv." class="section level2">
+<h2>if something is an IPA or another Ale based on IBU &amp; ABV.</h2>
+<hr />
+</div>
+<div id="question-9" class="section level2">
+<h2><strong>Question 9:</strong></h2>
+</div>
+<div id="find-one-other-useful-inference." class="section level2">
+<h2>Find one other useful inference.</h2>
+</div>
+<div id="graph-per-capita" class="section level2">
+<h2>Graph: Per Capita</h2>
+<pre class="r"><code>plot_usmap(data=state_summary, values=&quot;PerCapita&quot;, color=&quot;black&quot;) +
+    scale_fill_continuous(
+        low=&quot;red&quot;, high=&quot;green&quot;, name=&quot;Population/Breweries&quot;, label=scales::comma
+    ) +
+    theme(legend.position=&quot;right&quot;) +
+    labs(title=&quot;Brewery Analysis by State:&quot;,
+         subtitle=&quot;Population per Brewery as of 2015&quot;) +
+    theme(plot.title=element_text(size=18, hjust=0.5, face=&quot;bold&quot;),
+          plot.subtitle=element_text(size=18, hjust=0.5),
+    )</code></pre>
+<p><img src="Beer_files/figure-html/Q9-1.png" width="672" /></p>
+</div>
+<div id="answer-9" class="section level2">
+<h2><strong>Answer 9:</strong></h2>
+</div>
+<div id="red-areas-are-oversaturated-too-many-breweries-per-capita." class="section level2">
+<h2>Red areas are oversaturated (too many breweries per capita).</h2>
+</div>
+<div id="green-areas-need-new-craft-breweries." class="section level2">
+<h2>Green areas need new craft breweries.</h2>
+</div>
+<div id="i-advise-that-we-buy-existing-craft-breweries-or-open-new-ones-in" class="section level2">
+<h2>I advise that we buy existing craft breweries (or open new ones) in</h2>
+</div>
+<div id="tennessee-and-new-jersey." class="section level2">
+<h2>Tennessee and New Jersey.</h2>
+</div>
+<div id="other-possibilities-could-include-west-virginia-and-nevada." class="section level2">
+<h2>Other possibilities could include West Virginia and Nevada.</h2>
+<hr />
+</div>
+<div id="observation" class="section level2">
+<h2><strong>Observation</strong></h2>
+</div>
+<div id="this-data-seems-to-be-from-a-few-years-ago-2015.-in-the-years-since" class="section level2">
+<h2>This data seems to be from a few years ago (2015?). In the years since,</h2>
+</div>
+<div id="new-jersey-has-seen-a-major-increase-in-craft-breweries.-heres-an-interesting-article" class="section level2">
+<h2>New Jersey has seen a major increase in craft breweries. Here’s an Interesting article:</h2>
+<p><a href="https://www.northjersey.com/story/life/food/2019/01/03/north-jerseys-craft-brewery-scene-has-grown-more-than-any-other-state/2474070002/" class="uri">https://www.northjersey.com/story/life/food/2019/01/03/north-jerseys-craft-brewery-scene-has-grown-more-than-any-other-state/2474070002/</a></p>
+<p>```</p>
+<p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
